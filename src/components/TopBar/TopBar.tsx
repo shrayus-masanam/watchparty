@@ -31,6 +31,12 @@ export async function createRoom(
 ) {
   const uid = user?.uid;
   const token = await user?.getIdToken();
+  let auth = localStorage.getItem("auth");
+  if (auth == null) {
+    auth = window.prompt("Enter auth key");
+    if (auth == null) return;
+    localStorage.setItem("auth", auth);
+  }
   const response = await window.fetch(serverPath + '/createRoom', {
     method: 'POST',
     headers: {
@@ -40,8 +46,14 @@ export async function createRoom(
       uid,
       token,
       video,
+      auth
     }),
   });
+  if (response.status == 401) {
+    localStorage.removeItem("auth");
+    window.alert("bad auth");
+    return;
+  }
   const data = await response.json();
   const { name } = data;
   if (openNewTab) {
