@@ -2114,13 +2114,6 @@ export class App extends React.Component<AppProps, AppState> {
             {this.state.warningMessage}
           </Alert>
         )}
-        {!this.state.fullScreen && (
-          <TopBar
-            roomTitle={this.state.roomTitle}
-            roomDescription={this.state.roomDescription}
-            roomTitleColor={this.state.roomTitleColor}
-          />
-        )}
         {
           <div
             className={styles.mobileStack}
@@ -2157,175 +2150,7 @@ export class App extends React.Component<AppProps, AppState> {
                         disabled={!this.haveLock()}
                       />
                     </div>
-                    <div className={styles.mobileStack}>
-                      {this.localStreamToPublish && (
-                        <Button
-                          color="red"
-                          onClick={this.stopPublishingLocalStream}
-                          disabled={sharer?.id !== this.socket?.id}
-                          leftSection={<IconX />}
-                        >
-                          Stop Share
-                        </Button>
-                      )}
-                      {!this.localStreamToPublish &&
-                        !sharer &&
-                        !this.playingVBrowser() && (
-                          <Button
-                            className={styles.shareButton}
-                            color="blue"
-                            disabled={!this.haveLock()}
-                            onClick={() => {
-                              this.setState({
-                                isScreenShareModalOpen: true,
-                              });
-                            }}
-                            leftSection={<IconScreenShare />}
-                          >
-                            Screenshare
-                          </Button>
-                        )}
-                      {!this.localStreamToPublish &&
-                        !sharer &&
-                        !this.playingVBrowser() && (
-                          <Button
-                            className={styles.shareButton}
-                            disabled={!this.haveLock()}
-                            color="green"
-                            onClick={() => {
-                              this.setState({
-                                isVBrowserModalOpen: true,
-                              });
-                            }}
-                            leftSection={<IconBrowser />}
-                          >
-                            VBrowser
-                          </Button>
-                        )}
-                      {this.playingVBrowser() && (
-                        <>
-                          <Button
-                            color="red"
-                            disabled={!this.haveLock()}
-                            onClick={this.stopVBrowser}
-                            leftSection={<IconX />}
-                          >
-                            Stop VBrowser
-                          </Button>
-                          <Select
-                            leftSection={<IconKeyboardFilled />}
-                            value={this.state.controller}
-                            placeholder="No controller"
-                            clearable
-                            onChange={this.changeController}
-                            disabled={!this.haveLock()}
-                            data={this.state.participants.map((p) => ({
-                              label: this.state.nameMap[p.id] || p.id,
-                              value: p.id,
-                            }))}
-                          ></Select>
-                          <Select
-                            leftSection={<IconUserScreen />}
-                            disabled={!this.haveLock()}
-                            value={this.state.vBrowserResolution}
-                            onChange={(value) =>
-                              this.setState({
-                                vBrowserResolution: value as string,
-                              })
-                            }
-                            data={[
-                              {
-                                label: '1080p (Plus only)',
-                                value: '1920x1080@30',
-                                disabled: !this.state.isVBrowserLarge,
-                              },
-                              {
-                                label: '720p',
-                                value: '1280x720@30',
-                              },
-                              {
-                                label: '576p',
-                                value: '1024x576@60',
-                              },
-                              {
-                                label: '486p',
-                                value: '864x486@60',
-                              },
-                              {
-                                label: '360p',
-                                value: '640x360@60',
-                              },
-                            ]}
-                          ></Select>
-                          <Select
-                            leftSection={<IconAntennaBars5 />}
-                            disabled={!this.haveLock()}
-                            value={this.state.vBrowserQuality}
-                            onChange={(value) => {
-                              this.setState({
-                                vBrowserQuality: value as string,
-                              });
-                            }}
-                            data={[
-                              {
-                                label: 'Eco (0.25x)',
-                                value: '0.25',
-                              },
-                              {
-                                label: 'Low (0.5x)',
-                                value: '0.5',
-                              },
-                              {
-                                label: 'Standard (1x)',
-                                value: '1',
-                              },
-                              {
-                                label: 'High (1.5x)',
-                                value: '1.5',
-                              },
-                              {
-                                label: 'Ultra (2x)',
-                                value: '2',
-                              },
-                            ]}
-                          ></Select>
-                        </>
-                      )}
-                      {!this.localStreamToPublish &&
-                        !sharer &&
-                        !this.playingVBrowser() && (
-                          <Button
-                            className={styles.shareButton}
-                            color="violet"
-                            disabled={!this.haveLock()}
-                            onClick={() => {
-                              this.setState({
-                                isFileShareModalOpen: true,
-                              });
-                            }}
-                            leftSection={<IconFile />}
-                          >
-                            File
-                          </Button>
-                        )}
-                      {false && (
-                        <SearchComponent
-                          setMedia={this.roomSetMedia}
-                          playlistAdd={this.roomPlaylistAdd}
-                          type={'youtube'}
-                          disabled={!this.haveLock()}
-                        />
-                      )}
-                      {Boolean(this.context.streamPath) && (
-                        <SearchComponent
-                          setMedia={this.roomSetMedia}
-                          playlistAdd={this.roomPlaylistAdd}
-                          type={'stream'}
-                          launchMultiSelect={this.launchMultiSelect}
-                          disabled={!this.haveLock()}
-                        />
-                      )}
-                    </div>
+
                   </React.Fragment>
                 )}
                 <div style={{ flexGrow: 1, position: 'relative' }}>
@@ -2470,6 +2295,7 @@ export class App extends React.Component<AppProps, AppState> {
                 {!isMobile() && (
                   <div className={styles.expandButton}>
                     <ActionIcon
+                      color='gray'
                       onClick={() => {
                         const newVal = !this.state.showChatColumn;
                         this.setState({
@@ -2497,7 +2323,7 @@ export class App extends React.Component<AppProps, AppState> {
                 flexDirection: 'column',
                 position: 'relative',
                 width: this.state.showChatColumn ? 400 : 0,
-                maxWidth: 400,
+                maxWidth: 305,
                 overflow: 'hidden',
                 gap: '4px',
               }}
@@ -2537,12 +2363,12 @@ export class App extends React.Component<AppProps, AppState> {
                     </ActionIcon>
                   }
                 />
-                <InviteButton />
+                {/* <InviteButton /> */}
               </div>
               <div style={{ display: 'flex', gap: '4px' }}>
                 <Button
                   className={styles.shareButton}
-                  color="grey"
+                  color="black"
                   onClick={() =>
                     this.setState({
                       showPeopleColumn: !this.state.showPeopleColumn,
@@ -2552,6 +2378,7 @@ export class App extends React.Component<AppProps, AppState> {
                   rightSection={
                     <Badge
                       circle
+                      color="gray"
                     >
                       {this.state.participants.length}
                     </Badge>
@@ -2562,11 +2389,11 @@ export class App extends React.Component<AppProps, AppState> {
                 <Menu>
                         <Menu.Target>
                           <Button
-                            color="grey"
+                            color="black"
                             className={styles.shareButton}
                             leftSection={<IconList />}
                             rightSection={
-                              <Badge circle>{playlist.length}</Badge>
+                              <Badge color="gray" circle>{playlist.length}</Badge>
                             }
                           >
                             Playlist
@@ -2613,7 +2440,7 @@ export class App extends React.Component<AppProps, AppState> {
                       </Menu>
                       <Button
                         style={{ flexGrow: 1 }}
-                        color="grey"
+                        color="black"
                         title="Settings"
                         // className={styles.shareButton}
                         onClick={() => {

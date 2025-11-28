@@ -263,7 +263,7 @@ export class Chat extends React.Component<ChatProps> {
           marginTop: 0,
           marginBottom: 0,
           padding: '8px',
-          backgroundColor: 'rgba(30,30,30,1)',
+          backgroundColor: 'rgba(0, 0, 0, 1)',
         }}
       >
         <div
@@ -361,7 +361,7 @@ export class Chat extends React.Component<ChatProps> {
           /> */}
         </CSSTransition>
         <TextInput
-          style={{ marginTop: '10px' }}
+          style={{ marginTop: '10px', backgroundColor: "black" }}
           onKeyDown={(e: any) => e.key === 'Enter' && this.sendChatMsg()}
           onChange={this.updateChatMsg}
           value={this.state.chatMsg}
@@ -374,6 +374,7 @@ export class Chat extends React.Component<ChatProps> {
           }
           rightSection={
             <ActionIcon
+            color="gray"
               onClick={() => {
                 // Add a delay to prevent the click from triggering onClickOutside
                 const curr = this.state.isPickerOpen;
@@ -507,6 +508,7 @@ const ChatMessage = ({
         {imageMsg}
         <div className={styles.commentMenu}>
           <ActionIcon
+            color="gray"
             onClick={(e) => {
               const viewportOffset = (e.target as any).getBoundingClientRect();
               setTimeout(() => {

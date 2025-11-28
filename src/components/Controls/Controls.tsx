@@ -213,6 +213,7 @@ export class Controls extends React.Component<ControlsProps> {
           }}
         >
           <Progress.Section
+            color="#afafafff"
             style={{ pointerEvents: 'none', zIndex: 1 }}
             value={this.getPercent() * 100}
           ></Progress.Section>
@@ -374,6 +375,7 @@ export class Controls extends React.Component<ControlsProps> {
             min={0}
             max={1}
             step={0.01}
+            color="#979797ff"
             onChangeEnd={(value: number) => {
               this.props.localSetVolume(value);
             }}

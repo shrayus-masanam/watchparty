@@ -156,7 +156,7 @@ export class ComboBox extends React.Component<ComboBoxProps, ComboBoxState> {
         }}
         rightSection={
           <ActionIcon
-            color="red"
+            color="gray"
             onClick={(e: any) => this.setMediaAndClose('')}
             title="Clear"
           >
