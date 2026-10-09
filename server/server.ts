@@ -112,15 +112,18 @@ app.get("/ping", (_req, res) => {
   res.json("pong");
 });
 
+const fakeredis: Record<string, Buffer> = {};
+
 // Data's already compressed so go before the compression middleware
 app.get("/subtitle/:hash", async (req, res) => {
   const key = "subtitle:" + req.params.hash;
-  const buf = await redis?.getBuffer(key);
+  // const buf = await redis?.getBuffer(key);
+  const buf = fakeredis[key];
   if (!buf) {
     res.status(404).end("not found");
     return;
   }
-  await redis?.expire(key, 24 * 60 * 60);
+  // await redis?.expire(key, 24 * 60 * 60);
   res.setHeader("Content-Encoding", "gzip");
   res.end(buf);
 });
@@ -129,9 +132,9 @@ app.use(compression());
 
 app.post("/subtitle", async (req, res) => {
   const data = req.body;
-  if (!redis) {
-    return;
-  }
+  // if (!redis) {
+  //   return;
+  // }
   // calculate hash, gzip and save to redis
   const hash = crypto
     .createHash("sha256")
@@ -139,7 +142,8 @@ app.post("/subtitle", async (req, res) => {
     .digest()
     .toString("hex");
   let gzipData = gzipSync(data);
-  await redis.setex("subtitle:" + hash, 24 * 60 * 60, gzipData);
+  // await redis.setex("subtitle:" + hash, 24 * 60 * 60, gzipData);
+  fakeredis["subtitle:" + hash] = gzipData;
   redisCount("subUploads");
   res.json({ hash });
 });
@@ -179,7 +183,8 @@ app.get("/downloadSubtitles", async (req, res) => {
       .digest()
       .toString("hex");
     let gzipData = gzipSync(data);
-    await redis.setex("subtitle:" + hash, 24 * 60 * 60, gzipData);
+    // await redis.setex("subtitle:" + hash, 24 * 60 * 60, gzipData);
+    fakeredis["subtitle:" + hash] = gzipData;
     res.json({ link: "/subtitle/" + hash });
   } catch (e) {
     if (isAxiosError(e)) {
@@ -614,7 +619,7 @@ app.delete("/linkAccount", async (req, res) => {
   res.json({});
 });
 
-app.get("/generateName", async (req, res) => {
+app.get("/generateRandomName", async (req, res) => {
   res.send(makeUserName());
 });
 
