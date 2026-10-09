@@ -31,14 +31,9 @@ export async function createRoom(
 ) {
   const uid = user?.uid;
   const token = await user?.getIdToken();
-  let auth = localStorage.getItem("auth");
-  if (auth == null) {
-    auth = window.prompt("Enter auth key");
-    if (auth == null) return;
-    localStorage.setItem("auth", auth);
-  }
   const response = await fetch(serverPath + "/createRoom", {
     method: "POST",
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
@@ -46,12 +41,15 @@ export async function createRoom(
       uid,
       token,
       video,
-      auth,
     }),
   });
-  if (response.status == 401) {
-    localStorage.removeItem("auth");
-    window.alert("bad auth");
+  if (response.status === 401) {
+    // Not logged in, so go through OIDC login and come back here
+    window.location.assign(
+      serverPath +
+        "/auth/login?returnTo=" +
+        encodeURIComponent(window.location.href),
+    );
     return;
   }
   const data = await response.json();

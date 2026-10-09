@@ -1,6 +1,6 @@
 import config from "./config.ts";
 import fs from "node:fs";
-import express, { type Response } from "express";
+import express, { type Request, type Response } from "express";
 import bodyParser from "body-parser";
 import compression from "compression";
 import cors from "cors";
@@ -17,6 +17,12 @@ import {
   stripe,
 } from "./utils/stripe.ts";
 import { deleteUser, validateUserToken } from "./utils/firebase.ts";
+import {
+  getAllowedOrigins,
+  getSession,
+  handleCallback,
+  handleLogin,
+} from "./utils/oidc.ts";
 import path from "node:path";
 import { getStartOfDay } from "./utils/time.ts";
 import { getSessionLimitSeconds } from "./vm/utils.ts";
@@ -104,7 +110,17 @@ if (process.env.NODE_ENV === "development") {
   }
 }
 
-app.use(cors());
+// Room creation relies on the login session cookie, so it gets credentialed CORS for allowed origins only
+app.use(
+  cors((req, callback) =>
+    callback(
+      null,
+      (req as Request).path === "/createRoom"
+        ? { origin: [...getAllowedOrigins()], credentials: true }
+        : {},
+    ),
+  ),
+);
 app.use(bodyParser.json());
 app.use(bodyParser.raw({ type: "text/plain", limit: 1000000 }));
 
@@ -296,9 +312,12 @@ app.get("/youtubePlaylist/:playlistId", async (req, res) => {
   }
 });
 
+app.get("/auth/login", handleLogin);
+app.get("/auth/callback", handleCallback);
+
 app.post("/createRoom", async (req, res) => {
-  if (req.body.auth == null || req.body.auth != process.env.AUTH) {
-    res.status(401).send("no");
+  if (!getSession(req)) {
+    res.status(401).send("Login required");
     return;
   }
 
