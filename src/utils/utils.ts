@@ -53,18 +53,18 @@ export function formatSize(input: number) {
 }
 
 export const colorMappings: StringDict = {
-  red: "B03060",
-  orange: "FE9A76",
-  yellow: "FFD700",
-  olive: "32CD32",
-  green: "016936",
-  teal: "008080",
-  blue: "0E6EB8",
-  violet: "EE82EE",
-  purple: "B413EC",
-  pink: "FF1493",
-  brown: "A52A2A",
-  grey: "A0A0A0",
+  red: "7B2143",
+  orange: "B16B52",
+  yellow: "B29600",
+  olive: "238F23",
+  green: "004925",
+  teal: "005959",
+  blue: "094D80",
+  violet: "A65BA6",
+  purple: "7D0DA5",
+  pink: "B20E66",
+  brown: "731D1D",
+  grey: "707070",
 };
 
 export const softWhite = "whitesmoke";

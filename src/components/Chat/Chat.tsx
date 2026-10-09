@@ -280,7 +280,7 @@ export class Chat extends React.Component<ChatProps> {
           marginTop: 0,
           marginBottom: 0,
           padding: "8px",
-          backgroundColor: "rgba(30,30,30,1)",
+          backgroundColor: "rgba(0, 0, 0, 1)",
         }}
       >
         <div
@@ -384,7 +384,7 @@ export class Chat extends React.Component<ChatProps> {
             style={{
               marginTop: 10,
               padding: "6px 8px",
-              borderLeft: "2px solid rgb(46, 137, 212)",
+              borderLeft: "2px solid rgb(90, 90, 90)",
               background: "rgba(255, 255, 255, 0.06)",
               display: "flex",
               justifyContent: "space-between",
@@ -407,14 +407,19 @@ export class Chat extends React.Component<ChatProps> {
                 </div>
               ) : null}
             </div>
-            <Button size="xs" variant="subtle" onClick={this.clearReplyTo}>
+            <Button
+              size="xs"
+              variant="subtle"
+              color="gray"
+              onClick={this.clearReplyTo}
+            >
               Cancel
             </Button>
           </div>
         )}
         <TextInput
           ref={this.chatInputRef}
-          style={{ marginTop: "10px" }}
+          style={{ marginTop: "10px", backgroundColor: "black" }}
           onKeyDown={(e: any) => e.key === "Enter" && this.sendChatMsg()}
           onChange={this.updateChatMsg}
           value={this.state.chatMsg}
@@ -427,6 +432,7 @@ export class Chat extends React.Component<ChatProps> {
           }
           rightSection={
             <ActionIcon
+              color="gray"
               onClick={() => {
                 // Add a delay to prevent the click from triggering onClickOutside
                 const curr = this.state.isPickerOpen;
@@ -578,6 +584,7 @@ const ChatMessage = ({
         <div className={styles.commentMenu}>
           {id && id !== clientId && (
             <ActionIcon
+              color="gray"
               onClick={() => onReply(id, timestamp, msg)}
               disabled={isChatDisabled}
               style={{
@@ -596,6 +603,7 @@ const ChatMessage = ({
             </ActionIcon>
           )}
           <ActionIcon
+            color="gray"
             onClick={(e) => {
               //@ts-expect-error
               const viewportOffset = e.target.getBoundingClientRect();

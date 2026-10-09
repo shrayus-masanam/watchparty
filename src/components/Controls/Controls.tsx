@@ -213,6 +213,7 @@ export const Controls = (props: ControlsProps) => {
         }}
       >
         <Progress.Section
+          color="#afafafff"
           style={{ pointerEvents: "none", zIndex: 1 }}
           value={getPercent() * 100}
         ></Progress.Section>
@@ -377,6 +378,7 @@ export const Controls = (props: ControlsProps) => {
           min={0}
           max={1}
           step={0.01}
+          color="#979797ff"
           onChangeEnd={(value: number) => {
             props.localSetVolume(value);
           }}

@@ -2,9 +2,18 @@ html body {
   margin: 0;
   /* fix for scrollbar popping in and out at certain widths, but adds a permanent scrollbar */
   overflow-y: scroll;
-  background-color: #222222;
+  background-color: #000000;
 }
 
 ::-webkit-scrollbar-corner {
   background: rgba(0, 0, 0, 0);
+}
+
+input {
+  --input-bg: #000000;
+  --input-bd: #212121;
+}
+
+button {
+  --button-bg: #000000;
 }

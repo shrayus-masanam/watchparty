@@ -2146,13 +2146,6 @@ export class App extends React.Component<AppProps, AppState> {
             {this.state.warningMessage}
           </Alert>
         )}
-        {!this.state.fullScreen && (
-          <TopBar
-            roomTitle={this.state.roomTitle}
-            roomDescription={this.state.roomDescription}
-            roomTitleColor={this.state.roomTitleColor}
-          />
-        )}
         {
           <div
             className={styles.mobileStack}
@@ -2187,240 +2180,6 @@ export class App extends React.Component<AppProps, AppState> {
                         mediaPath={this.state.mediaPath}
                         disabled={!this.haveLock()}
                       />
-                    </div>
-                    <div className={styles.mobileStack}>
-                      {this.localStreamToPublish && (
-                        <Button
-                          color="red"
-                          onClick={this.stopPublishingLocalStream}
-                          leftSection={<IconX />}
-                        >
-                          Stop Share
-                        </Button>
-                      )}
-                      {!this.localStreamToPublish &&
-                        !sharer &&
-                        !this.playingVBrowser() && (
-                          <Button
-                            className={styles.shareButton}
-                            color="blue"
-                            disabled={!this.haveLock()}
-                            onClick={() => {
-                              this.setState({
-                                isScreenShareModalOpen: true,
-                              });
-                            }}
-                            leftSection={<IconScreenShare />}
-                          >
-                            Screenshare
-                          </Button>
-                        )}
-                      {!this.localStreamToPublish &&
-                        !sharer &&
-                        !this.playingVBrowser() && (
-                          <Button
-                            className={styles.shareButton}
-                            disabled={!this.haveLock()}
-                            color="green"
-                            onClick={() => {
-                              this.setState({
-                                isVBrowserModalOpen: true,
-                              });
-                            }}
-                            leftSection={<IconBrowser />}
-                          >
-                            VBrowser
-                          </Button>
-                        )}
-                      {this.playingVBrowser() && (
-                        <>
-                          <Button
-                            color="red"
-                            disabled={!this.haveLock()}
-                            onClick={this.stopVBrowser}
-                            leftSection={<IconX />}
-                          >
-                            Stop VBrowser
-                          </Button>
-                          <Select
-                            leftSection={<IconKeyboardFilled />}
-                            value={this.state.controller}
-                            placeholder="No controller"
-                            clearable
-                            onChange={this.changeController}
-                            disabled={!this.haveLock()}
-                            data={this.state.participants.map((p) => ({
-                              label: this.state.nameMap[p.id] || p.id,
-                              value: p.id,
-                            }))}
-                          ></Select>
-                          <Select
-                            leftSection={<IconUserScreen />}
-                            disabled={!this.haveLock()}
-                            value={this.state.vBrowserResolution}
-                            onChange={(value) =>
-                              this.setState({
-                                vBrowserResolution: value!,
-                              })
-                            }
-                            data={[
-                              {
-                                label: "1080p (Plus only)",
-                                value: "1920x1080@30",
-                                disabled: !this.state.isVBrowserLarge,
-                              },
-                              {
-                                label: "720p",
-                                value: "1280x720@30",
-                              },
-                              {
-                                label: "576p",
-                                value: "1024x576@60",
-                              },
-                              {
-                                label: "486p",
-                                value: "864x486@60",
-                              },
-                              {
-                                label: "360p",
-                                value: "640x360@60",
-                              },
-                            ]}
-                          ></Select>
-                          <Select
-                            leftSection={<IconAntennaBars5 />}
-                            disabled={!this.haveLock()}
-                            value={this.state.vBrowserQuality}
-                            onChange={(value) => {
-                              this.setState({
-                                vBrowserQuality: value!,
-                              });
-                            }}
-                            data={[
-                              {
-                                label: "Eco (0.25x)",
-                                value: "0.25",
-                              },
-                              {
-                                label: "Low (0.5x)",
-                                value: "0.5",
-                              },
-                              {
-                                label: "Standard (1x)",
-                                value: "1",
-                              },
-                              {
-                                label: "High (1.5x)",
-                                value: "1.5",
-                              },
-                              {
-                                label: "Ultra (2x)",
-                                value: "2",
-                              },
-                            ]}
-                          ></Select>
-                        </>
-                      )}
-                      {!this.localStreamToPublish &&
-                        !sharer &&
-                        !this.playingVBrowser() && (
-                          <Button
-                            className={styles.shareButton}
-                            color="violet"
-                            disabled={!this.haveLock()}
-                            onClick={() => {
-                              this.setState({
-                                isFileShareModalOpen: true,
-                              });
-                            }}
-                            leftSection={<IconFile />}
-                          >
-                            File
-                          </Button>
-                        )}
-                      {this.state.uploadController && (
-                        <Button
-                          color="red"
-                          onClick={() => {
-                            this.state.uploadController?.abort();
-                          }}
-                          leftSection={<IconX />}
-                        >
-                          Stop Convert
-                        </Button>
-                      )}
-                      {false && (
-                        <SearchComponent
-                          setMedia={this.roomSetMedia}
-                          playlistAdd={this.roomPlaylistAdd}
-                          type={"youtube"}
-                          setShowMultiSelect={this.setMultiSelectModal}
-                          setFileSelection={this.setFileSelection}
-                          disabled={!this.haveLock()}
-                        />
-                      )}
-                      {Boolean(this.context.streamPath) && (
-                        <SearchComponent
-                          setMedia={this.roomSetMedia}
-                          playlistAdd={this.roomPlaylistAdd}
-                          type={"stream"}
-                          setShowMultiSelect={this.setMultiSelectModal}
-                          setFileSelection={this.setFileSelection}
-                          disabled={!this.haveLock()}
-                        />
-                      )}
-                      <Menu>
-                        <Menu.Target>
-                          <Button
-                            color="grey"
-                            leftSection={<IconList />}
-                            rightSection={
-                              <Badge circle>{playlist.length}</Badge>
-                            }
-                            className={styles.shareButton}
-                          >
-                            Playlist
-                          </Button>
-                        </Menu.Target>
-                        <Menu.Dropdown
-                          style={{
-                            overflowY:
-                              playlist.length > 0 ? "scroll" : undefined,
-                            maxHeight: 400,
-                            maxWidth: isMobile() ? 400 : 600,
-                          }}
-                        >
-                          {playlist.length === 0 && (
-                            <Menu.Item disabled>
-                              There are no items in the playlist.
-                            </Menu.Item>
-                          )}
-                          {playlist.map(
-                            (item: PlaylistVideo, index: number) => {
-                              if (Boolean(item.img)) {
-                                item.type = "youtube";
-                              }
-                              return (
-                                <Menu.Item key={index}>
-                                  <ChatVideoCard
-                                    video={item}
-                                    index={index}
-                                    controls
-                                    onPlay={this.roomPlaylistPlay}
-                                    onPlayNext={(index) => {
-                                      this.roomPlaylistMove(index, 0);
-                                    }}
-                                    onRemove={(index) => {
-                                      this.roomPlaylistDelete(index);
-                                    }}
-                                    disabled={!this.haveLock()}
-                                  />
-                                </Menu.Item>
-                              );
-                            },
-                          )}
-                        </Menu.Dropdown>
-                      </Menu>
                     </div>
                   </React.Fragment>
                 )}
@@ -2565,6 +2324,7 @@ export class App extends React.Component<AppProps, AppState> {
                 {!isMobile() && (
                   <div className={styles.expandButton}>
                     <ActionIcon
+                      color="gray"
                       onClick={() => {
                         const newVal = !this.state.showChatColumn;
                         this.setState({
@@ -2592,7 +2352,7 @@ export class App extends React.Component<AppProps, AppState> {
                 flexDirection: "column",
                 position: "relative",
                 width: this.state.showChatColumn ? 400 : 0,
-                maxWidth: 400,
+                maxWidth: 305,
                 overflow: "hidden",
                 gap: "4px",
               }}
@@ -2631,34 +2391,89 @@ export class App extends React.Component<AppProps, AppState> {
                     </Button>
                   }
                 />
-                <InviteButton />
+                {/* <InviteButton /> */}
               </div>
               <div style={{ display: "flex", gap: "4px" }}>
                 <Button
-                  color="grey"
+                  color="black"
+                  className={styles.shareButton}
                   onClick={() =>
                     this.setState({
                       showPeopleColumn: !this.state.showPeopleColumn,
                     })
                   }
-                  fullWidth
                   leftSection={<IconUsersGroup />}
                   rightSection={
-                    <Badge circle>{this.state.participants.length}</Badge>
+                    <Badge color="gray" circle>
+                      {this.state.participants.length}
+                    </Badge>
                   }
                 >
                   People
                 </Button>
+                <Menu>
+                  <Menu.Target>
+                    <Button
+                      color="black"
+                      leftSection={<IconList />}
+                      rightSection={
+                        <Badge color="gray" circle>
+                          {playlist.length}
+                        </Badge>
+                      }
+                      className={styles.shareButton}
+                    >
+                      Playlist
+                    </Button>
+                  </Menu.Target>
+                  <Menu.Dropdown
+                    style={{
+                      overflowY:
+                        playlist.length > 0 ? "scroll" : undefined,
+                      maxHeight: 400,
+                      maxWidth: isMobile() ? 400 : 600,
+                    }}
+                  >
+                    {playlist.length === 0 && (
+                      <Menu.Item disabled>
+                        There are no items in the playlist.
+                      </Menu.Item>
+                    )}
+                    {playlist.map(
+                      (item: PlaylistVideo, index: number) => {
+                        if (Boolean(item.img)) {
+                          item.type = "youtube";
+                        }
+                        return (
+                          <Menu.Item key={index}>
+                            <ChatVideoCard
+                              video={item}
+                              index={index}
+                              controls
+                              onPlay={this.roomPlaylistPlay}
+                              onPlayNext={(index) => {
+                                this.roomPlaylistMove(index, 0);
+                              }}
+                              onRemove={(index) => {
+                                this.roomPlaylistDelete(index);
+                              }}
+                              disabled={!this.haveLock()}
+                            />
+                          </Menu.Item>
+                        );
+                      },
+                    )}
+                  </Menu.Dropdown>
+                </Menu>
                 <Button
-                  color="grey"
+                  style={{ flexGrow: 1 }}
+                  color="black"
                   title="Settings"
-                  fullWidth
                   onClick={() => {
                     this.setSettingsModalOpen(true);
                   }}
-                  leftSection={<IconSettings />}
                 >
-                  Settings
+                  <IconSettings />
                 </Button>
               </div>
               {this.state.state === "connected" && (

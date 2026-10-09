@@ -111,7 +111,7 @@
 .replyMessage {
   background: radial-gradient(
     at top right,
-    rgba(255, 176, 96, 0.22),
+    rgba(255, 255, 255, 0.08),
     transparent 70%
   );
 }
