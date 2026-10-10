@@ -1,9 +1,12 @@
-import { Client, type QueryResult } from "pg";
+import pg from "pg";
+import type { Client, QueryResult } from "pg";
+
+const { Client: PgClient } = pg;
 import config from "../config.ts";
 
 export let postgres: Client | undefined = undefined;
 if (config.DATABASE_URL) {
-  postgres = new Client({
+  postgres = new PgClient({
     connectionString: config.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
   });
@@ -19,7 +22,7 @@ export function newPostgres() {
   if (!config.DATABASE_URL) {
     throw new Error("postgres not configured");
   }
-  const postgres = new Client({
+  const postgres = new PgClient({
     connectionString: config.DATABASE_URL,
     ssl: { rejectUnauthorized: false },
   });
